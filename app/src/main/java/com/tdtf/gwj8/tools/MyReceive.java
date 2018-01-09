@@ -19,6 +19,7 @@ import com.tdtf.gwj8.myDataBase.MyDatabaseHelper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by Administrator on 2017/2/8.
@@ -28,7 +29,7 @@ import java.io.FileOutputStream;
 
 public class MyReceive extends BroadcastReceiver {
 
-    private final String TAG = "MyReceive";
+    final String TAG = "MyReceive";
     File file = new File("/data/data/com.tdtf.client/databases/weili16.db");
     Handler handler;
 
@@ -89,6 +90,13 @@ public class MyReceive extends BroadcastReceiver {
                                                 if (!tempFile.exists()) {
                                                     tempFile.mkdirs();
                                                 }
+                                                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+                                                String strDate = sdf.format(System.currentTimeMillis());
+                                                String usbPath = pathString + File.separator + strDate;
+                                                File usbFile = new File(usbPath);
+                                                if (!usbFile.exists()) {
+                                                    usbFile.mkdirs();
+                                                }
 
                                                 long fileSize0 = 0;
                                                 try {
@@ -98,20 +106,19 @@ public class MyReceive extends BroadcastReceiver {
                                                 }
                                                 int a = (int) (Math.random() * 999999999);
                                                 FileInputStream ins = new FileInputStream(strPath);
-                                                FileOutputStream os = new FileOutputStream(pathString + File.separator + "weili" + a + ".db");
+                                                FileOutputStream os = new FileOutputStream(usbPath + File.separator + "weili" + a + ".db");
                                                 while ((len = ins.read(bs)) != -1) {
                                                     os.write(bs, 0, len);
                                                     os.flush();
-                                                    File cFile = new File(pathString + File.separator + "weili" + a + ".db");
+                                                    File cFile = new File(usbPath + File.separator + "weili" + a + ".db");
                                                     long fileCopy = 0;
                                                     try {
                                                         fileCopy = getFileSize(cFile);
                                                     } catch (Exception e) {
                                                         e.printStackTrace();
                                                     }
-
                                                     if (fileSize0 == fileCopy) {
-                                                        if (cFile.renameTo(new File(pathString + File.separator + "weili16.db"))) {
+                                                        if (cFile.renameTo(new File(usbPath + File.separator + "weili16.db"))) {
                                                             Message msg = Message.obtain();
                                                             msg.what = 0;
                                                             msg.obj = context;
@@ -120,7 +127,6 @@ public class MyReceive extends BroadcastReceiver {
                                                             //数据库操作
                                                             clearData(context);
                                                             ///////////
-
                                                             alertDialog.dismiss();
                                                             handler.sendMessageDelayed(msg, 0);
                                                         }
@@ -167,6 +173,8 @@ public class MyReceive extends BroadcastReceiver {
                                 e.printStackTrace();
                             }
                             if (oddFileSize == newFileSize) {
+                                Log.d(TAG, "onClick: "+oddFileSize);
+                                Log.d(TAG, "onClick: "+newFileSize);
                                 usbDialog(context, "提示", "文件导出失败");
                             }
                         }
