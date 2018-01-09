@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/data_search_bg"
+    android:orientation="vertical"
+    tools:context="com.tdtf.gwj8.activity.DataQuary">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_power_5"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="700dp"
+            android:text="TextView"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/text_user_5"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="TextView"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp" />
+
+        <TextClock
+            android:id="@+id/textClock5"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginStart="30dp"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fragsearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal"></LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnback"
+            android:layout_width="144dp"
+            android:layout_height="55dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="802dp"
+            android:background="@drawable/button_no" />
+
+    </LinearLayout>
+</LinearLayout>
