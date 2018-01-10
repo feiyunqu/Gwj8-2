@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.tdtf.gwj8.MyService;
 import com.tdtf.gwj8.Myutils;
 import com.tdtf.gwj8.R;
+import com.tdtf.gwj8.SerialOrder;
 import com.tdtf.gwj8.Transform;
 import com.tdtf.gwj8.activity.Mainmenu;
 import com.tdtf.gwj8.myDataBase.Diary;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 myService = myBinder.getService();
                 myService.setValues(new MyService.CallBacks() {
                     @Override
-                    public void startRead() {
+                    public void startRead(StringBuffer strBuffer) {
 
                     }
 
@@ -148,12 +149,11 @@ public class MainActivity extends AppCompatActivity {
                 //你需要跳转的地方的代码
                 btnlogin.performClick();
             }
-        }, 2000);//延迟2秒跳转  
-        ///////////////////////////////////////////////////////
-
+        }, 1500);//延迟2秒跳转  
     }
 
     public void logining(String user, String password) {
+        Log.d("shunxu", "run: 25555555");
 //        Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
 //                "select _id,password from User where userName=?", new String[]{user});
 //        if (cursor.moveToFirst()) {//判断用户是否存在
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         Myutils.setUsername(autouser.getText().toString());
         String strPowerString = Myutils.getPowerstring(dbHelper, textpower.getText().toString());
         Log.d("ssss", "logining: " + strPowerString);
-        startActivity(new Intent(MainActivity.this, Mainmenu.class));
+
         ////////发送用户名、时间、权限内容
         String userPowerHex = "";
         if (TextUtils.isEmpty(strPowerString)) {
@@ -235,10 +235,29 @@ public class MainActivity extends AppCompatActivity {
         }
         Log.d("ssss", "logining: " + sendTime);
         ////////////////////////////////
+
         myDiary.diary(dbHelper, Diary.login_userPower(autouser.getText().toString(), textpower.getText().toString()));
         autouser.setText("");
         editPassword.setText("");
         textpower.setText("");
+        new Handler().postDelayed(new Runnable() {
+            public void
+            run() {
+                //你需要跳转的地方的代码
+                if (Myutils.isStartFlag()) {
+                    Log.d("shunxu", "run: 3");
+                    Myutils.setStartFlag(false);
+                    startActivity(new Intent(MainActivity.this, Mainmenu.class));
+                } else {
+                    Log.d("shunxu", "run: 4");
+                    Myutils.setStartFlag(false);
+                    Myutils.setHandFlag(false);
+                    Toast.makeText(getApplicationContext(),"启动异常，请先开启下位机或检查串口线是否已连接。",Toast.LENGTH_LONG).show();
+                    stopService(new Intent(MainActivity.this, MyService.class));
+                    finish();
+                }
+            }
+        }, 1500);//延迟2秒跳转  
         unbindService(serviceConnection);
 //            } else {
 //                Toast.makeText(getApplicationContext(), "密码输入错误", Toast.LENGTH_SHORT).show();
@@ -279,6 +298,8 @@ public class MainActivity extends AppCompatActivity {
         super.onRestart();
         Log.d("ffff", "onRestart: ");
         //unbindService(serviceConnection);
+        Myutils.setStartFlag(false);
+        Myutils.setHandFlag(false);
         stopService(new Intent(this, MyService.class));
         finish();
     }

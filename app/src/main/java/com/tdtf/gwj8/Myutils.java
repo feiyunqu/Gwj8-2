@@ -214,7 +214,7 @@ public class Myutils {
         return ciShu;
     }
 
-    public static long fileSize = 0;
+    private static long fileSize = 0;
 
     public static long getFileSize() {
         return fileSize;
@@ -222,5 +222,25 @@ public class Myutils {
 
     public static void setFileSize(long fileSize) {
         Myutils.fileSize = fileSize;
+    }
+
+    private static boolean startFlag=false;//开关机标志位
+
+    public static boolean isStartFlag() {
+        return startFlag;
+    }
+
+    public static void setStartFlag(boolean startFlag) {
+        Myutils.startFlag = startFlag;
+    }
+
+    public static boolean handFlag=false;
+
+    public static boolean isHandFlag() {
+        return handFlag;
+    }
+
+    public static void setHandFlag(boolean handFlag) {
+        Myutils.handFlag = handFlag;
     }
 }

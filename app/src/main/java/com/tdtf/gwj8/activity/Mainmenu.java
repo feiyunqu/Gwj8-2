@@ -81,7 +81,7 @@ public class Mainmenu extends AppCompatActivity {
                 myService = myBinder.getService();
                 myService.setValues(new MyService.CallBacks() {
                     @Override
-                    public void startRead() {
+                    public void startRead(StringBuffer strBuffer) {
                         Cursor cursor = dbHelper.getReadableDatabase().rawQuery("select * from (select * from Diary where dateTime like ? order by dateTime desc limit 20) order by _id",
                                 new String[]{Myutils.formatDate(System.currentTimeMillis()) + "%"});//cursor里必须包含主键"_id"
                         inflateList(cursor);

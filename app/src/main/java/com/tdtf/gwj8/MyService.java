@@ -46,36 +46,38 @@ public class MyService extends Service {
                 streamdata = streamdata + msg;
                 Log.d("dddd", "run: " + streamdata);
                 if (streamdata.startsWith("aa0001") || streamdata.startsWith("ff") || streamdata.startsWith("aa0002")) {
+                    Log.d("shunxu", "run: 233333");
                     streamdata = "";
                 }
                 if (streamdata.startsWith("aa0004") && streamdata.length() > 28) {
+                    Log.d("shunxu", "run: 2");
+                    Myutils.setStartFlag(true);
                     streamdata = "";
                 }
                 if (streamdata.length() > 5) {
-                    if (msg.startsWith(SerialOrder.ORDER_HANDSHAKING)) {
-                        if (msg.startsWith(SerialOrder.ORDER_HANDSHAKING)) {//握手
-                            try {
-                                for (int i = 0; i < 14; i = i + 2) {
-                                    mOutputStream.write(Integer.parseInt(SerialOrder.ORDER_HANDSHAKING.substring(i, i + 2), 16));
+                    if (!Myutils.isHandFlag()){
+                        if (msg.startsWith(SerialOrder.ORDER_HANDSHAKING)) {
+                            if (msg.startsWith(SerialOrder.ORDER_HANDSHAKING)) {//握手
+                                Log.d("shunxu", "run: 2222");
+                                Log.d("QWER", "run: ");
+                                try {
+                                    for (int i = 0; i < 14; i = i + 2) {
+                                        mOutputStream.write(Integer.parseInt(SerialOrder.ORDER_HANDSHAKING.substring(i, i + 2), 16));
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
-                                Log.d("wwww", "run: 00get");
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
-                            if (callbacks != null) {
-                                callbacks.startRead();
-                            }
+                            Myutils.setHandFlag(true);
+                            streamdata = "";
                         }
-                        streamdata = "";
                     }
-
-                    if (streamdata.startsWith("aa0004") && streamdata.endsWith("cc33c33c") && streamdata.length() < 29) {//检测设置
-                        String[] strJianCeSheZhi = SolveFunction.upJianCeSheZhi(streamdata);
-                        for (int m = 0; m < strJianCeSheZhi.length; m++) {
-                            myDiary.diary(dbHelper, strJianCeSheZhi[m]);
-                        }
-                        if (callbacks != null) {
-                            callbacks.startRead();
+                    if (streamdata.startsWith("aa0004") && streamdata.endsWith("cc33c33c")) {//检测设置
+                        if (streamdata.length() < 29){
+                            String[] strJianCeSheZhi = SolveFunction.upJianCeSheZhi(streamdata);
+                            for (int m = 0; m < strJianCeSheZhi.length; m++) {
+                                myDiary.diary(dbHelper, strJianCeSheZhi[m]);
+                            }
                         }
                         streamdata = "";
                     }
@@ -84,18 +86,12 @@ public class MyService extends Service {
                         for (int m = 0; m < strQingXiSheZhi.length; m++) {
                             myDiary.diary(dbHelper, strQingXiSheZhi[m]);
                         }
-                        if (callbacks != null) {
-                            callbacks.startRead();
-                        }
                         streamdata = "";
                     }
                     if (streamdata.startsWith("aa0006") && streamdata.endsWith("cc33c33c")) {//搅拌速度
                         String[] strJiaoBanSuDu = SolveFunction.upJiaoBanSuDu(streamdata);
                         for (int m = 0; m < strJiaoBanSuDu.length; m++) {
                             myDiary.diary(dbHelper, strJiaoBanSuDu[m]);
-                        }
-                        if (callbacks != null) {
-                            callbacks.startRead();
                         }
                         streamdata = "";
                     }
@@ -105,13 +101,8 @@ public class MyService extends Service {
                         setSharedPreference("自定义一", Myutils.getArrayList_1());
                         setSharedPreference("自定义二", Myutils.getArrayList_2());
 
-                        Log.d("kkk", "run: " + Myutils.getStandard());
-
                         for (int m = 0; m < strTongDaoSheZhi.length; m++) {
                             myDiary.diary(dbHelper, strTongDaoSheZhi[m]);
-                        }
-                        if (callbacks != null) {
-                            callbacks.startRead();
                         }
                         streamdata = "";
                     }
@@ -120,18 +111,12 @@ public class MyService extends Service {
                         for (int m = 0; m < strZiJianXinXi.length; m++) {
                             myDiary.diary(dbHelper, strZiJianXinXi[m]);
                         }
-                        if (callbacks != null) {
-                            callbacks.startRead();
-                        }
                         streamdata = "";
                     }
                     if (streamdata.startsWith("aa0009") && streamdata.endsWith("cc33c33c")) {//打印设置
                         String[] strDaYinSheZhi = SolveFunction.upDaYinSheZhi(streamdata);
                         for (int m = 0; m < strDaYinSheZhi.length; m++) {
                             myDiary.diary(dbHelper, strDaYinSheZhi[m]);
-                        }
-                        if (callbacks != null) {
-                            callbacks.startRead();
                         }
                         streamdata = "";
                     }
@@ -140,18 +125,12 @@ public class MyService extends Service {
                         for (int m = 0; m < strBiaoChi.length; m++) {
                             myDiary.diary(dbHelper, strBiaoChi[m]);
                         }
-                        if (callbacks != null) {
-                            callbacks.startRead();
-                        }
                         streamdata = "";
                     }
                     if (streamdata.startsWith("aa000b") && streamdata.endsWith("cc33c33c")) {//速度设置
                         String[] strSuDuSheZhi = SolveFunction.upSuDuSheZhi(streamdata);
                         for (int m = 0; m < strSuDuSheZhi.length; m++) {
                             myDiary.diary(dbHelper, strSuDuSheZhi[m]);
-                        }
-                        if (callbacks != null) {
-                            callbacks.startRead();
                         }
                         streamdata = "";
                     }
@@ -161,18 +140,11 @@ public class MyService extends Service {
                             myDiary.diary(dbHelper, strZaoShengCeDing[m]);
                         }
                         streamdata = "";
-                        if (callbacks != null) {
-                            callbacks.startRead();
-                        }
-                        streamdata = "";
                     }
                     if (streamdata.startsWith("aa000d") && streamdata.endsWith("cc33c33c")) {//修正值
                         String[] strXiuZhengZhi = SolveFunction.upXiuZhengZhi(streamdata);
                         for (int m = 0; m < strXiuZhengZhi.length; m++) {
                             myDiary.diary(dbHelper, strXiuZhengZhi[m]);
-                        }
-                        if (callbacks != null) {
-                            callbacks.startRead();
                         }
                         streamdata = "";
                     }
@@ -180,9 +152,6 @@ public class MyService extends Service {
                         String[] strYangPinXinXi = SolveFunction.upYangPinXinXi(streamdata);
                         for (int m = 0; m < strYangPinXinXi.length; m++) {
                             myDiary.diary(dbHelper, strYangPinXinXi[m]);
-                        }
-                        if (callbacks != null) {
-                            callbacks.startRead();
                         }
                         streamdata = "";
                     }
@@ -249,8 +218,6 @@ public class MyService extends Service {
             }
         });
         thread.start();
-
-
     }
 
     @Override
@@ -287,14 +254,10 @@ public class MyService extends Service {
         public MyService getService() {
             return MyService.this;
         }
-
-        public void threadGo() {
-            flag = true;
-        }
     }
 
     public interface CallBacks {
-        void startRead();
+        void startRead(StringBuffer strBuffer);
 
         void output(FileOutputStream outputStream);
     }
@@ -322,10 +285,10 @@ public class MyService extends Service {
             editor.putInt("standard", Myutils.getStandard());
             editor.putString("danwei", Myutils.getDanWei());
             editor.putString("cishu", Myutils.getCiShu());
-            editor.putString("shengjiang",Myutils.getShengjiang());
-            editor.putString("jiance",Myutils.getJiance());
-            editor.putString("yuzouliang",Myutils.getYuzouliang());
-            editor.putString("quyangliang",Myutils.getQuyangliang());
+            editor.putString("shengjiang", Myutils.getShengjiang());
+            editor.putString("jiance", Myutils.getJiance());
+            editor.putString("yuzouliang", Myutils.getYuzouliang());
+            editor.putString("quyangliang", Myutils.getQuyangliang());
             editor.apply();
         }
     }
